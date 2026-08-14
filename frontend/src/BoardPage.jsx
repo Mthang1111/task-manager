@@ -18,6 +18,10 @@ function BoardPage() {
     const [editingListId, setEditingListId] = useState(null)
     const [editListName, setEditListName] = useState('')
 
+    const [board, setBoard] = useState(null)
+    const [editingBoard, setEditingBoard] = useState(false)
+    const [editBoardName, setEditBoardName] = useState('')
+
     const [labels, setLabels] = useState([]) // single source of truth for labels, shared by LabelManager + every CardsList
 
     useEffect(() => {
@@ -35,6 +39,19 @@ function BoardPage() {
         .finally(() => setLoading(false))
     }, [boardId])
     // [boardId] instead of [] to re-runs the fetch if the user navigates from /boards/1 to /boards/2
+
+    useEffect(() => {
+        fetch(`${API_URL}/boards/${boardId}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to fetch board')
+            return response.json()
+        })
+        .then(data => {
+            setBoard(data)
+            setError(null)
+        })
+        .catch(err => setError(err.message))
+    }, [boardId])
 
     useEffect(() => {
         fetch(`${API_URL}/labels`)
@@ -96,11 +113,55 @@ function BoardPage() {
         .catch(err => setError(err.message))
     }
 
+    function updateBoardHandle(){
+      fetch(`${API_URL}/boards/${boardId}`, {
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          name: editBoardName,
+        })
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Failed to update board')
+        return response.json()
+      })
+      .then(updatedBoard => {
+        setBoard(updatedBoard) //only need to display the updatedBoard here
+        setEditingBoard(false) 
+      })
+      .catch(err => setError(err.message))
+    }
+
 
     return (
     <div className="app">
         <Link to="/">Back to boards</Link>
-        <h1>Board {boardId}</h1>
+        {editingBoard ? (
+            <div className="board-title-edit">
+                <input
+                    value={editBoardName}
+                    onChange={(e) => setEditBoardName(e.target.value)}
+                />
+                <button onClick={updateBoardHandle}>Save</button>
+                <button onClick={() => setEditingBoard(false)}>Cancel</button>
+            </div>
+        ) : (
+            <h1>
+                {board ? board.name : 'Loading...'} 
+                {/* board && to prevent edit button from appearing first */}
+                {board && (
+                    <button
+                        className="board-edit-btn"
+                        onClick={() => {
+                            setEditBoardName(board.name)
+                            setEditingBoard(true)
+                        }}
+                    >
+                        Edit
+                    </button>
+                )}
+            </h1>
+        )}
 
         {error && <p className="error">{error}</p>}
             
