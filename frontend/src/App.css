@@ -227,6 +227,61 @@ h1::after {
   color: var(--accent);
 }
 
+/* Board title (rename) */
+
+.board-title-edit {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 2rem;
+}
+
+.board-title-edit input {
+  font-size: 1.5rem;
+  font-weight: 650;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: var(--ink-soft);
+  color: var(--text);
+  flex: 1;
+  max-width: 420px;
+}
+
+.board-title-edit button {
+  padding: 0.4rem 0.85rem;
+  border: 1px solid #383a42;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.board-title-edit button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.board-edit-btn {
+  margin-left: 0.75rem;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid #383a42;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  font-weight: 500;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.board-edit-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 /*  Delete / danger  */
 
 .delete-btn {
