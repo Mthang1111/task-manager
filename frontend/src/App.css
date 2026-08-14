@@ -1,0 +1,773 @@
+:root {
+  --ink: #0a0e1f;
+  --ink-soft: #141c38;
+  --ink-line: rgba(255, 255, 255, 0.1);
+  --surface: #eef1fa;
+  --surface-line: #d7ddf0;
+  --text: #f3f5fb;
+  --text-dim: #8892b8;
+  --text-on-surface: #1b2340;
+  --accent: #f2c14e;
+  --accent-soft: rgba(242, 193, 78, 0.16);
+  --on-accent: #12172c;
+  --danger: #ff7a7a;
+  --danger-soft: rgba(255, 122, 122, 0.14);
+  --radius: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--ink);
+  background-image:
+    radial-gradient(1.6px 1.6px at 12% 18%, rgba(255, 255, 255, 0.55), transparent 60%),
+    radial-gradient(1.2px 1.2px at 28% 64%, rgba(255, 255, 255, 0.4), transparent 60%),
+    radial-gradient(1.8px 1.8px at 46% 32%, rgba(242, 193, 78, 0.55), transparent 60%),
+    radial-gradient(1.2px 1.2px at 63% 78%, rgba(255, 255, 255, 0.35), transparent 60%),
+    radial-gradient(1.6px 1.6px at 78% 22%, rgba(255, 255, 255, 0.5), transparent 60%),
+    radial-gradient(1.2px 1.2px at 91% 58%, rgba(242, 193, 78, 0.4), transparent 60%),
+    radial-gradient(1.4px 1.4px at 8% 82%, rgba(255, 255, 255, 0.4), transparent 60%),
+    radial-gradient(1.2px 1.2px at 55% 6%, rgba(255, 255, 255, 0.35), transparent 60%);
+  background-repeat: repeat;
+  background-size: 340px 340px;
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+}
+
+/*  Focus visibility   */
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/*  Headings + back link  */
+
+h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.4rem;
+  color: var(--text);
+}
+
+/* Gold hairline under the page title, anchors the header block */
+h1::after {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 2px;
+  margin-top: 0.85rem;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+
+.app > a {
+  display: inline-block;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  margin-bottom: 1rem;
+  transition: color 0.15s;
+}
+
+.app > a::before {
+  content: "\2190";
+  margin-right: 0.4rem;
+}
+
+.app > a:hover {
+  color: var(--accent);
+}
+
+/*  Create / input row  */
+
+.create-board {
+  display: flex;
+  gap: 0.6rem;
+  margin: 2rem 0;
+}
+
+.create-board input,
+.cards-list input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.7rem 0.95rem;
+  border: 1px solid var(--ink-line);
+  border-radius: var(--radius);
+  background: var(--ink-soft);
+  color: var(--text);
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.create-board input::placeholder,
+.cards-list input::placeholder {
+  color: var(--text-dim);
+}
+
+.create-board input:focus,
+.cards-list input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.create-board button,
+.cards-list button:not(.delete-btn) {
+  padding: 0.7rem 1.3rem;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: filter 0.15s, transform 0.1s;
+}
+
+.create-board button:hover,
+.cards-list button:not(.delete-btn):hover {
+  filter: brightness(1.08);
+}
+
+.create-board button:active,
+.cards-list button:not(.delete-btn):active {
+  transform: scale(0.97);
+}
+
+/*  Boards list  */
+
+.board-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.board-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.15rem;
+  background: var(--ink-soft);
+  border: 1px solid var(--ink-line);
+  border-left: 3px solid transparent;
+  border-radius: var(--radius);
+  gap: 0.75rem;
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.board-item:hover {
+  border-left-color: var(--accent);
+  transform: translateX(2px);
+}
+
+.board-item a {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 550;
+  font-size: 1rem;
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.board-item a:hover {
+  color: var(--accent);
+}
+
+.board-item input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--ink);
+  color: var(--text);
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+}
+
+.board-item > button {
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--ink-line);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.board-item > button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/*  Delete / danger  */
+
+.delete-btn {
+  border: 1px solid transparent !important;
+  background: var(--danger-soft) !important;
+  color: var(--danger) !important;
+  transition: background 0.15s, color 0.15s;
+}
+
+.delete-btn:hover {
+  background: var(--danger) !important;
+  color: var(--ink) !important;
+}
+
+/*  Lists row  */
+
+.lists-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  overflow-x: auto;
+  padding-bottom: 1.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-soft) transparent;
+}
+
+.lists-row::-webkit-scrollbar {
+  height: 8px;
+}
+
+.lists-row::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.lists-row::-webkit-scrollbar-thumb {
+  background: var(--ink-soft);
+  border-radius: 4px;
+}
+
+.lists-row::-webkit-scrollbar-thumb:hover {
+  background: var(--text-dim);
+}
+
+/* Flex-wrap turns the column into a header row (title + Edit + Delete
+   side by side) with the cards list dropping to a full-width row below,
+   instead of everything stacking vertically. */
+.list-column {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--surface);
+  color: var(--text-on-surface);
+  border-radius: var(--radius);
+  border-top: 3px solid var(--accent);
+  padding: 0.9rem;
+  width: 280px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.list-column h3 {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0;
+  color: var(--text-on-surface);
+  overflow-wrap: break-word;
+}
+
+/* List-level Edit / Delete */
+.list-column > button {
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--surface-line);
+  border-radius: 6px;
+  background: transparent;
+  color: #5b6485;
+  font-size: 0.72rem;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.list-column > button:hover {
+  border-color: #9aa3c4;
+  color: var(--text-on-surface);
+}
+
+.list-column > button.delete-btn {
+  border: 1px solid transparent !important;
+}
+
+/* Rename input in a list header */
+.list-column > input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: white;
+  color: var(--text-on-surface);
+  font-size: 0.85rem;
+  font-family: inherit;
+  outline: none;
+}
+
+/*  Cards  */
+
+.cards-list {
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.card-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+  background: #ffffff;
+  border: 1px solid var(--surface-line);
+  border-radius: 8px;
+  padding: 0.65rem 0.8rem;
+  font-size: 0.9rem;
+  box-shadow: 0 1px 2px rgba(27, 35, 64, 0.06);
+  position: relative;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+
+.card-item:hover {
+  border-color: #b9c3e0;
+  box-shadow: 0 3px 8px rgba(27, 35, 64, 0.1);
+}
+
+/* Card title  */
+.card-item > span {
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text-on-surface);
+  padding-right: 1.6rem;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.card-item .card-desc,
+.card-item .card-date {
+  font-size: 0.8rem;
+  color: #5b6485;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.card-item .card-date {
+  font-variant-numeric: tabular-nums;
+  color: #6f7899;
+}
+
+/* Small round close button, out of the text flow */
+.card-item .delete-btn {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* Card action buttons (Edit / Save / Cancel / Labels).
+   Same as `.cards-list button:not(.delete-btn)` but declared
+   later */
+.card-item button:not(.delete-btn) {
+  padding: 0.32rem 0.7rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: #eef1fa;
+  color: #5b6485;
+  font-size: 0.75rem;
+  font-weight: 500;
+  width: auto;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.card-item button:not(.delete-btn):hover {
+  filter: none;
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--text-on-surface);
+}
+
+.card-item button:not(.delete-btn):first-of-type {
+  border-color: transparent;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+
+.card-item input {
+  width: 100%;
+  margin-top: 0;
+  background: #f8f9fd;
+  border: 1px solid var(--surface-line);
+  color: var(--text-on-surface);
+  font-size: 0.85rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+}
+
+
+.cards-list > input {
+  margin-top: 0;
+  background: transparent;
+  border: 1px dashed #c3cbe6;
+  color: var(--text-on-surface);
+  font-size: 0.85rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 6px;
+}
+
+.cards-list > input:first-of-type {
+  margin-top: 0.7rem;
+}
+
+.cards-list > input:focus {
+  border-style: solid;
+  border-color: var(--accent);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.cards-list > input::placeholder {
+  color: #9aa3c4;
+}
+
+.cards-list > button:not(.delete-btn) {
+  margin-top: 0.5rem;
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 0.82rem;
+}
+
+/*  States  */
+
+.error {
+  color: var(--danger);
+  background: var(--danger-soft);
+  border: 1px solid rgba(255, 122, 122, 0.3);
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.88rem;
+}
+
+.cards-list .error {
+  font-size: 0.78rem;
+  padding: 0.45rem 0.65rem;
+  margin-bottom: 0;
+}
+
+.empty-state {
+  color: var(--text-dim);
+  text-align: center;
+  padding: 2.5rem 0;
+  font-size: 0.95rem;
+}
+
+/*  Label manager  */
+
+.label-manager {
+  margin-top: 3.5rem;
+  padding: 1.75rem;
+  background: rgba(20, 28, 56, 0.5);
+  border: 1px solid var(--ink-line);
+  border-radius: var(--radius);
+}
+
+.label-manager h2 {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  margin: 0 0 1.1rem;
+}
+
+.create-label {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  margin-bottom: 1.4rem;
+}
+
+.create-label input:not([type="color"]) {
+  flex: 1;
+  min-width: 0;
+  padding: 0.7rem 0.95rem;
+  border: 1px solid var(--ink-line);
+  border-radius: var(--radius);
+  background: var(--ink-soft);
+  color: var(--text);
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.create-label input:not([type="color"])::placeholder {
+  color: var(--text-dim);
+}
+
+.create-label input:not([type="color"]):focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.label-manager input[type="color"] {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  padding: 3px;
+  border: 1px solid var(--ink-line);
+  border-radius: var(--radius);
+  background: var(--ink-soft);
+  cursor: pointer;
+}
+
+.create-label button {
+  padding: 0.7rem 1.3rem;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: filter 0.15s, transform 0.1s;
+}
+
+.create-label button:hover {
+  filter: brightness(1.08);
+}
+
+.create-label button:active {
+  transform: scale(0.97);
+}
+
+.label-holder {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.label-holder li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.55rem;
+  background: var(--ink-soft);
+  border: 1px solid var(--ink-line);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+}
+
+.label-customize {
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #14172b;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
+}
+
+.label-holder li input:not([type="color"]) {
+  width: 130px;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--ink);
+  color: var(--text);
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+}
+
+.label-holder li input[type="color"] {
+  width: 32px;
+  height: 32px;
+}
+
+.label-holder li button {
+  padding: 0.28rem 0.6rem;
+  border: 1px solid var(--ink-line);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 0.73rem;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.label-holder li button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.label-holder li > button:last-child {
+  border-color: transparent;
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.label-holder li > button:last-child:hover {
+  background: var(--danger);
+  color: var(--ink);
+}
+
+.label-manager .empty-state {
+  padding: 0.5rem 0 1rem;
+  text-align: left;
+}
+
+/*  Labels on cards  */
+
+.card-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin: 0.2rem 0 0;
+}
+
+.card-labels .label-customize {
+  padding: 0.15rem 0.5rem;
+  font-size: 0.72rem;
+}
+
+.label-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.45rem;
+  padding: 0.6rem;
+  width: 100%;
+  background: #dde3f5;
+  border: 1px solid #b9c3e0;
+  border-radius: 8px;
+}
+
+.label-picker-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  width: fit-content;
+  max-width: 100%;
+  cursor: pointer;
+  padding: 0.15rem 0.2rem;
+  border-radius: 4px;
+  transition: background 0.12s;
+}
+
+.label-picker-row:hover {
+  background: rgba(242, 193, 78, 0.22);
+}
+
+.label-picker-row input[type="checkbox"] {
+  accent-color: var(--accent);
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.label-picker .empty-state {
+  padding: 0.4rem 0;
+  text-align: left;
+  font-size: 0.78rem;
+  color: #6f7899;
+}
+
+/*  Responsive  */
+
+@media (max-width: 640px) {
+  .app {
+    padding: 2rem 1rem 3.5rem;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  .create-board {
+    flex-wrap: wrap;
+  }
+
+  .create-board input {
+    flex-basis: 100%;
+  }
+
+  .create-label {
+    flex-wrap: wrap;
+  }
+
+  .create-label input:not([type="color"]) {
+    flex-basis: 100%;
+  }
+
+  .list-column {
+    width: 260px;
+  }
+
+  .label-manager {
+    padding: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
