@@ -16,6 +16,13 @@ def register_routes(app):
         boards = db.session.execute(querying).scalars().all() #run the stmt against the database, then convert raw results to python objects
         return jsonify([{"id": b.id, "name": b.name} for b in boards])
 
+    @app.route("/api/boards/<int:board_id>", methods = ["GET"])
+    def get_board(board_id):
+        board = db.session.get(Board, board_id)
+        if board is None:
+            return jsonify({"error": "board not found"}), 404
+        return jsonify({"id": board.id, "name": board.name})
+
     @app.route("/api/boards", methods = ["POST"]) #only respond with post(write) request
     def make_boards():
         data = request.get_json()  #parse incoming http data as json
